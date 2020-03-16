@@ -128,7 +128,18 @@ class TargetCreateForm(forms.ModelForm):
 class TargetUpdateForm(forms.ModelForm):
     class Meta:
         model = TumorTarget
-        fields = ('target_no','target_yn','nontarget_yn', 'reference_yn')
+        fields = '__all__'
+
+    # def __init__(self, *args, **kwargs):
+    #     super(TargetUpdateForm, self).__init__(*args, **kwargs)
+    #     print(self)
+    #     print(self.instance)
+    # #     print(self)
+    #
+    #     target_no = self.kwargs['target_no']
+    #     patient_id = kwargs.pop('patient_id')
+    #     patient = Patient.objects.get(pk=patient_id)
+    #     self.queryset = TumorTarget.objects.get(patient=patient, target_no=target_no)
 
 
 class PatientCreateForm(forms.ModelForm):

@@ -322,6 +322,28 @@ class TargetUpdateView(generic.UpdateView):
     form_class = TargetUpdateForm
     pk_url_kwarg = 'target_no'
 
+    def get_object(self, **kwargs):
+        patient_id = self.kwargs['patient_id']
+        target_no = self.kwargs['target_no']
+        patient = Patient.objects.get(pk=patient_id)
+        tumortargetobj = TumorTarget.objects.get(patient=patient, target_no=target_no)
+        return tumortargetobj
+
+    def get_form(self, form_class=form_class):
+        form = super(TargetUpdateView, self).get_form(form_class)
+        patient_id = self.kwargs['patient_id']
+        target_no = self.kwargs['target_no']
+        patient = Patient.objects.get(pk=patient_id)
+        print (patient)
+        print('patient_id',patient_id, 'target_no', target_no)
+        tumortarget = TumorTarget.objects.get(patient=patient, target_no=target_no)
+        print('this is tumortarget',tumortarget)
+        form.fields['patient'].object = tumortarget.patient
+        form.fields['patient'].initial = tumortarget.patient
+        form.fields['target_no'].initial = tumortarget.target_no
+        form.fields['target_yn'].initial = tumortarget.target_yn
+        return form
+
     def get_success_url(self):
         patient_id = self.kwargs['patient_id']
         return reverse('chemoresponse:targetlist', kwargs={'pk':patient_id})
