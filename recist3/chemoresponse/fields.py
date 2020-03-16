@@ -10,19 +10,23 @@ def _add_path_to_thumb(s):
     print('this is path',s)
     fname_list=[]
     parts = s.split(".")
+    print('this is parts',parts)
     pathparts=parts[0].split("\\")
+    print('this is pathparts', pathparts)
     fname_list.append(pathparts[-1])
     fname_list.append('-thumb')
     fname_list.append('.jpg')
     fname ="".join(fname_list)
     del pathparts[-1]
-    pathparts.append('thumbnails\\')
+    pathparts.extend(['thumbnails\\'])
+    print('this is pathparts final', pathparts)
     path_prop = "\\".join(pathparts)
+    print('this is pathparts final prop', path_prop)
     fullpath = path_prop+fname
     return fullpath
 
 def _add_url_to_thumb(s):
-    print('this is path',s)
+    print('this is url',s)
     fname_list=[]
     parts = s.split(".")
     pathparts=parts[0].split("/")
