@@ -22,8 +22,13 @@ def _add_path_to_thumb(s):
     print('this is pathparts final', pathparts)
     path_prop = "\\".join(pathparts)
     print('this is pathparts final prop', path_prop)
+    MEDIA_ROOT_THUMB = os.path.join(MEDIA_ROOT, 'target_image\\thumbnails')
+    print('this is media_root_thumb', MEDIA_ROOT_THUMB)
+    fullopathusingos = os.path.join(MEDIA_ROOT_THUMB,fname)
+    print('this is full path using os ',fullopathusingos )
+
     fullpath = path_prop+fname
-    return fullpath
+    return fullopathusingos
 
 def _add_url_to_thumb(s):
     print('this is url',s)
