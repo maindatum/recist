@@ -22,7 +22,7 @@ def _add_path_to_thumb(s):
     print('this is pathparts final', pathparts)
     path_prop = "\\".join(pathparts)
     print('this is pathparts final prop', path_prop)
-    MEDIA_ROOT_THUMB = os.path.join(MEDIA_ROOT, 'target_image\\thumbnails\\')
+    MEDIA_ROOT_THUMB = os.path.join(MEDIA_ROOT, 'target_image/thumbnails/')
     print('this is media_root_thumb', MEDIA_ROOT_THUMB)
     fullopathusingos = os.path.join(MEDIA_ROOT_THUMB,fname)
     print('this is full path using os ',fullopathusingos )
