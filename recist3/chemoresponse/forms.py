@@ -158,8 +158,7 @@ class EvalModalCreateForm(forms.ModelForm):
         if instance and instance.pk:
             self.fields['patient'].disabled = True
         else:
-            self.fields['pateint'].disabled = False
-
+            pass
 
 class EvalModalUpdateForm(forms.ModelForm):
     class Meta:

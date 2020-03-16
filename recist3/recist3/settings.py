@@ -25,7 +25,9 @@ SECRET_KEY = '*1feuvuv7@gkin0s^&zc5huricwd960hp0*^++j6&i%ib5*y(o'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['hpcrates.pythonanywhere.com']
+ALLOWED_HOSTS = ['hpcrates.pythonanywhere.com',
+                 '127.0.0.1',
+                 ]
 
 
 # Application definition

@@ -335,7 +335,8 @@ class EvalModalCreateView(generic.CreateView):
     def get_form(self, form_class=form_class):
         form = super(EvalModalCreateView, self).get_form(form_class)
         patient_id = self.kwargs['pk']
-        patient = Patient.objects.get(pk=patient_id)
+        patient = Patient.objects.filter(pk=patient_id)
+        form.fields['patient'].queryset = patient
         form.fields['patient'].initial = patient
         return form
 
