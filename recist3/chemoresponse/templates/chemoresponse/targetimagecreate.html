@@ -82,7 +82,12 @@
         }
         #image_area{
             height:200px;
-            border:1px solid orange;
+            border:5px dashed orange;
+        }
+        #editableDiv{
+            height:200px;
+            border:5px dashed blue;
+            background-color:#ff9966;
         }
 
     </style>
@@ -116,10 +121,10 @@
     <div class="container-form">
 
         <div class="box-form pasted-image-area">
-            <div class="btn-paste">미리보기</div>
-            <div id="image_area"></div>
+            <div class="btn-paste">미리보기/붙여넣기</div>
+            <div id="editableDiv" contenteditable='true'><div id="image_area" ></div></div>
             <div class="btn-paste">
-                <button type="button" class="btn btn-primary" id="btn_id_image_desc" data-imagegrab-url ={% url 'chemoresponse:imagegrab' %}>붙여넣기</button>
+{#                <button type="button" class="btn btn-primary" id="btn_id_image_desc" data-imagegrab-url ={% url 'chemoresponse:imagegrab' %}>붙여넣기</button>#}
             </div>
         </div>
         <div class="box-form">
@@ -141,8 +146,6 @@
             </form>
         </div>
     </div>
-    <div id='editableDiv' contenteditable='true'>Paste</div>
-    <label for="testId">여기있다.</label><input type="text" id="testId">
 
 </body>
 <script>
@@ -229,7 +232,7 @@
     const imageAreaElement = document.getElementById("image_area");
     console.log(imageAreaElement);
     const ChangeImageInputElement = document.getElementById("id_target_image");
-    console.log(ChangeImageInputElement);
+    console.log('this is target_image button', ChangeImageInputElement);
 
     function bindPasteButton(){
         imagedescElement.addEventListener('click', event => {
@@ -273,16 +276,25 @@
         // Stop data actually being pasted into div
         e.stopPropagation();
         e.preventDefault();
+        console.log('you entered func. handlepaste');
 
         // Get pasted data via clipboard API
         clipboardData = e.clipboardData || window.clipboardData;
         var items = clipboardData.items;
         for (var i=0; i<items.length;i++){
-            console.log(i);
-            console.log(items[i])
+            console.log('this is index',i);
+            console.log('this is item-index i', items[i])
         }
         item1 = items[0];
-        alert(item1);
+
+        console.log('this is item1', item1);
+        console.log('type of item1', typeof(item1));
+        console.log('this is type of item1;', item1.type);
+        typeofitem1 = item1.type;
+        console.log('is image??', typeofitem1.split("/")[0]);
+
+
+        console.log('this is type of type of item1;', typeof(item1.type));
         var blob2 = item1.getAsFile();
         console.log('this is blob2', blob2);
 
@@ -291,27 +303,30 @@
         var reader = new FileReader();
         {#readerdata = reader.readAsDataURL(blob2);#}
         {#console.log(readerdata);#}
-        reader.onload=function(e){
-            alert('loaded');
-            console.log('this is reader result', reader.result);
-            document.getElementById('editableDiv').value = reader.result;
-            let htmlimgtag = "<img height=\"200px\" src=";
-            htmlimgtag += e.target.result  + ">";
-            render_data('image_area',htmlimgtag);
-            render_value('id_image_container',htmlimgtag);
-        };
-        reader.readAsDataURL(blob2);
+        if (typeofitem1.split("/")[0]==='image') {
 
+            reader.onload = function (e) {
+                alert('이미지 붙여넣기');
+                console.log('this is reader result', reader.result);
+                document.getElementById('editableDiv').value = reader.result;
+                let htmlimgtag = "<img height=\"200px\" src=";
+                htmlimgtag += e.target.result + ">";
+                render_data('image_area', htmlimgtag);
+                render_value('id_image_container', htmlimgtag);
+            };
+            reader.readAsDataURL(blob2);
+        }
+        else{
+            console.log('this is not image. bye.')
+        }
 
-        // Do whatever with pasteddata
-        alert(pastedData);
     }
 
     document.getElementById('editableDiv').addEventListener('paste',handlePaste
     );
     function main(){
         console.log('hello this is ds2html');
-        bindPasteButton();
+        {#bindPasteButton();#}
         bindChangeImageInputButton();
     }
     document.addEventListener('DOMContentLoaded', main);

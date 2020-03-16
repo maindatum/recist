@@ -17,27 +17,27 @@ from django.template.loader import render_to_string
 import datetime
 
 
-def imagegrabing(request):
-    img = ImageGrab.grabclipboard()
-    print(img)
-
-    context = {}
-    if img:
-        img_bytes = BytesIO()
-        img.save(img_bytes, format='png')
-        img_base64 = codecs.encode(img_bytes.getvalue(),'base64')
-        img_base64_text = codecs.decode(img_base64,'ascii')
-        html_img_tag = "<img height=\"200px\" src='data:image/png;base64, %s'/>" % img_base64_text
-        print(html_img_tag)
-        context['is_image'] = True
-        context['html_img_tag']=html_img_tag
-        print('there is image')
-        context['img_base64_text'] = img_base64_text
-    else:
-        context['is_image'] = False
-        context['html_img_tag']=img
-        print('there is no image')
-    return JsonResponse(context)
+# def imagegrabing(request):
+#     img = ImageGrab.grabclipboard()
+#     print(img)
+#
+#     context = {}
+#     if img:
+#         img_bytes = BytesIO()
+#         img.save(img_bytes, format='png')
+#         img_base64 = codecs.encode(img_bytes.getvalue(),'base64')
+#         img_base64_text = codecs.decode(img_base64,'ascii')
+#         html_img_tag = "<img height=\"200px\" src='data:image/png;base64, %s'/>" % img_base64_text
+#         print(html_img_tag)
+#         context['is_image'] = True
+#         context['html_img_tag']=html_img_tag
+#         print('there is image')
+#         context['img_base64_text'] = img_base64_text
+#     else:
+#         context['is_image'] = False
+#         context['html_img_tag']=img
+#         print('there is no image')
+#     return JsonResponse(context)
 
 
 class PatientListView(generic.ListView):

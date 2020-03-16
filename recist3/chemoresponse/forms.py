@@ -70,7 +70,7 @@ class TargetImageForm(forms.ModelForm):
         for el in self.cleaned_data:
             print ('this is cleaned_data', el)
         imgdata = self.cleaned_data['image_container']
-        print('this is imadata',imgdata)
+        # print('this is imadata',imgdata)
         if not imgdata:
             print('this is target image', self.instance.target_image)
             print('file name is..', self.instance.target_image.name)
@@ -106,7 +106,9 @@ class TargetImageForm(forms.ModelForm):
             else:
                 imgserial_str = str(1)
             fname = unitnumb_str + '-' + ptname_str + '-' + bodyfield_str + '-' + imgmodal_str + '-' + imgdate_str + '-TN-' + targetno_str + '-SN-' + imgserial_str
-            imgdata64 =base64.b64decode(imgdata)
+            print('this is imgdata split', imgdata.split(',')[1])
+            imgdata_split = imgdata.split(',')[1]
+            imgdata64 =base64.b64decode(imgdata_split)
             print(fname)
             self.instance.target_image.save('%s.%s' % (fname, ftype), ContentFile(imgdata64))
         print('wow wow success')
