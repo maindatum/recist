@@ -7,7 +7,7 @@ from django.urls import reverse
 from .forms import TargetImageForm, TargetCreateForm, PatientCreateForm, TargetImageUpdateForm, EvalModalCreateForm,\
     TargetUpdateForm, EvalModalUpdateForm
 from django.db.models import Avg, Max, Min, Sum
-from PIL import ImageGrab
+# from PIL import ImageGrab
 import base64
 from io import BytesIO, StringIO
 import codecs
