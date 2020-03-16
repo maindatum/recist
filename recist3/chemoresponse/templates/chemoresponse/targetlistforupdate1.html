@@ -1,0 +1,60 @@
+{% extends 'base2.html' %}
+{% block head %}
+    <style>
+        .target-container {
+            display: grid;
+            border: 1px solid red;
+            grid-template-rows: 200px;
+            grid-template-columns:200px 200px 200px 200px;
+            align-content: center;
+            justify-content: center;
+            align-items:center;
+            justify-items: center;
+        }
+        .target-inner-container{
+            border:1px solid blue;
+            height:120px;
+            width:200px;
+        }
+    </style>
+{% endblock %}
+{% block content %}
+    <h3>표적 리스트 대상 환자 : {{patient.ptname}}</h3>
+    <div class="target-container">
+        {% if patient.tumortarget_set.all %}
+            {% for el in target_images_list %}
+                <div class="target-inner-container">
+                    {% if el.first_image_item %}
+                        <figure>
+                            <a href="{% url "chemoresponse:tumortargets"  patient_id=patient.id target_no=el.target_no %}">
+                                <img src="{{ el.first_image_item.url}}" alt="" height="80px" />
+                                <figcaption>Target No : {{ el.target_no }}</figcaption></a>
+                        </figure>
+                        <div>
+                            <a href="{%url 'chemoresponse:target-update' patient_id=patient.id target_no=el.target_no %}"><button>수정하기</button></a>
+                            <a href="{%url 'chemoresponse:target-update' patient_id=patient.id target_no=el.target_no %}"><button>삭제하기</button></a>
+                        </div>
+                    {% else %}
+                        <figure>
+                            <a href="{% url "chemoresponse:tumortargets"  patient_id=patient.id target_no=el.target_no %}">
+                                <p> No Target Image</p>
+                                <figcaption>Target No : {{ el.target_no }}</figcaption></a>
+                        </figure>
+                    {% endif %}
+
+                </div>
+            {% endfor %}
+
+        {#        <ul>#}
+        {#            {% for tumortarget in patient.tumortarget_set.all %}#}
+        {#                <li><a href="{% url "chemoresponse:tumortargets" patient_id=patient.id target_no=tumortarget.target_no %}">{{ tumortarget.target_no }}</a></li>#}
+        {#            {% endfor %}#}
+        {#        </ul>#}
+    {% else %}
+        <p>No targets are available.</p>
+    {% endif %}
+    <a href="{% url 'chemoresponse:targetcreate' pk=pk %}"><button type="button">표적 추가하기</button></a>
+    <a href="{% url 'chemoresponse:target-update-list' pk=pk %}"><button type="button">표적 수정하기</button></a>
+    <a href="{% url 'chemoresponse:eval-modal-create' pk=pk %}"><button type="button">검사 추가하기</button></a>
+</div>
+{% endblock %}

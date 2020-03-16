@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% block head %}
+    <style>
+        .menu-box{
+            display:grid;
+            grid-template-columns:200px 200px 200px 200px;
+            justify-content: center;
+            border:1px dotted red;
+        }
+        .container {
+            display: grid;
+            border: 3px dotted red;
+            grid-template-rows: 500px;
+            grid-template-columns:600px ;
+            align-content: center;
+            justify-content: center;
+            align-items:center;
+            justify-items: center;
+        }
+        .inner-container{
+            display:grid;
+            border:2px dashed green;
+            grid-template-columns:200px 200px;
+        }
+        .box{
+            border:1px solid blue;
+            height:40px;
+            width:200px;
+        }
+        .bottom-container{
+            display:grid;
+            justify-items: center;
+        }
+    </style>
+
+{% endblock %}
+{% block content %}
+    <h3>표적 리스트 대상 환자 : {{tumortarget.patient.ptname}}</h3>
+    <div class="menu-box">
+        <a href="{% url 'chemoresponse:targetlist' pk=tumortarget.patient_id%}"><button type="button">표적목록으로</button></a>
+{#        <a href="{% url 'chemoresponse:target-update-list' pk=patient.id %}"><button type="button">표적 수정</button></a>#}
+{#        <a href="{% url 'chemoresponse:targetcreate' pk=patient.id %}"><button type="button">표적 추가하기</button></a>#}
+{#        <a href="{% url 'chemoresponse:eval-modal-create' pk=patient_id %}"><button type="button">검사 추가하기</button></a>#}
+    </div>
+    <div class="container">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            {% for field in form %}
+                <div class="inner-container">
+                    <div class="box">{{ field.label }}</div>
+                    <div class="box">{{ field }}</div>
+                </div>
+            {% endfor %}
+
+            <div class="bottom-container">
+                <button type="submit" class="btn btn-primary">표적 수정</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}

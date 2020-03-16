@@ -1,0 +1,11 @@
+{% extends 'base2.html' %}
+{% block content %}
+    Delete
+    <form method="post">
+    {% csrf_token %}
+        <p>삭제 진짜 하시렵니까?</p>
+        <p>후회 마십셔</p>
+        <button type="submit">삭제!!</button>
+    </form>
+
+{% endblock %}

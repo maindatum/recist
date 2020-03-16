@@ -1,0 +1,18 @@
+{% if latest_patient_list %}
+    <ul>
+    {% for patient in latest_patient_list %}
+        <li><a href="{% url "chemoresponse:detail" patient.id %}">{{ patient.ptname }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No patients are available.</p>
+{% endif %}
+
+<h1>{{ patient.ptname }}</h1>
+<ul>
+    {% for tumortarget in patient.tumortarget_set.all %}
+        <li>{{ tumortarget.target_no }}--{{ tumortarget.votes }}vote{{ tumortarget.votes|pluralize }}</li>
+    {% endfor %}
+</ul>
+
+<a href="{% url 'chemoresponse:tumortargets' patient.id  %}">Vote Again?</a>

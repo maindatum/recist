@@ -1,0 +1,14 @@
+{% load static %}
+{% include "django/forms/widgets/input.html" %}
+<link rel="stylesheet" href={% static "widgets/fdatepicker/datepicker.css"  %}>
+<script src={% static "widgets/fdatepicker/datepicker.js" %}></script>
+<script src={% static "widgets/fdatepicker/datepicker_partial.js" %}></script>
+
+<script defer>
+    $(function () {
+        $('[data-toggle="datepicker"]').datepicker({
+            format:'yyyy/mm/dd',
+        });
+    });
+
+</script>

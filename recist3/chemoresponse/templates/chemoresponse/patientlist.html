@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block head %}
+    <style>
+        .menu-box{
+            display:grid;
+            grid-template-columns:200px 200px 200px 200px;
+            justify-items:center;
+            justify-content: center;
+            margin-bottom: 20px;
+            border:1px solid red;
+        }
+        .container{
+            display:grid;
+            grid-template-columns: 500px;
+            justify-content: center;
+            justify-items:center;
+        }
+        .container-inner{
+            display:grid;
+            grid-template-columns: 80px 150px 150px 150px 150px;
+            grid-auto-rows:40px
+        }
+    </style>
+{% endblock %}
+{% block content %}
+    <h3>환자목록</h3>
+    <div class="menu-box">
+        <button type="button"><a href="{% url 'chemoresponse:patient-create' %}">환자등록</a></button>
+    </div>
+
+{% if latest_patient_list %}
+    <div class="container">
+    {% for patient in latest_patient_list %}
+        <div class="container-inner">
+            <div class="container-box">{{ patient.ptname }}:</div>
+                <div><a href="{% url "chemoresponse:targetlist" patient.id %}"><button>표적관리</button></a></div>
+                <div><a href="{% url "chemoresponse:target-list-for-images" patient.id %}"><button>표적반응관리</button></a></div>
+                <a href="{% url 'chemoresponse:evalmodality-list' patient.id %}"><button type="button">검사관리</button></a>
+                <div><a href="{% url "chemoresponse:reseponse-target-list" patient.id %}"><button>반응평가</button></a></div>
+
+        </div>
+    {% endfor %}
+    </div>
+{% else %}
+    <p>No patients are available.</p>
+{% endif %}
+{% endblock %}

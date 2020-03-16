@@ -1,0 +1,141 @@
+{% extends 'base3.html' %}
+{% block head %}
+    <style>
+        .menu-box{
+            display:grid;
+            grid-template-columns:200px 200px 200px 200px;
+            justify-content: center;
+        }
+        .target-container {
+            display: grid;
+            border: 1px solid red;
+            grid-auto-rows: minmax(150px,auto);
+            grid-template-columns: 100px 800px;
+            align-content: center;
+            justify-content: center;
+            align-items:center;
+            justify-items: center;
+        }
+        .container-inner{
+            display:grid;
+            grid-template-columns: 200px 200px 200px 200px;
+            border: 2px solid orange;
+        }
+        .target-box{
+            border:1px solid blue;
+            height:120px;
+            width:200px;
+        }
+    </style>
+{% endblock %}
+{% block content %}
+    <h3>표적 리스트 대상 환자 : {{patient.ptname}}</h3>
+    <div class="menu-box">
+        <a href="{% url 'chemoresponse:patientlist' %}"><button type="button">환자 관리</button></a>
+        <a href="{% url 'chemoresponse:target-update-list' pk=pk %}"><button type="button">표적 수정</button></a>
+        <a href="{% url 'chemoresponse:targetcreate' pk=pk %}"><button type="button">표적 추가하기</button></a>
+     </div>
+    <div class="target-container">
+        {% if patient.tumortarget_set.all %}
+            <div>
+                Target lesions
+            </div>
+            <div class="container-inner">
+                {% for el in target_images_targetlesion_list %}
+                    <div class="target-box">
+                        {% if el.first_image_item %}
+                            <figure>
+
+                                    <img src="{{ el.first_image_item.url}}" alt="" height="80px" />
+                                    <figcaption>Target No : {{ el.target_no }}</figcaption>
+                            </figure>
+                        {% else %}
+                            <figure>
+
+                                    <p> No Target Image</p>
+                                    <figcaption>Target No : {{ el.target_no }}</figcaption>
+                            </figure>
+                        {% endif %}
+
+                    </div>
+                {% endfor %}
+            </div>
+            <div>
+                Non Target lesions
+            </div>
+            <div class="container-inner">
+                {% for el in target_images_nontargetlesion_list %}
+                    <div class="target-box">
+                        {% if el.first_image_item %}
+                            <figure>
+
+                                    <img src="{{ el.first_image_item.url}}" alt="" height="80px" />
+                                    <figcaption>Target No : {{ el.target_no }}</figcaption>
+                            </figure>
+                        {% else %}
+                            <figure>
+
+                                    <p> No Target Image</p>
+                                    <figcaption>Target No : {{ el.target_no }}</figcaption>
+                            </figure>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+            <div>
+                Reference lesions
+            </div>
+            <div class="container-inner">
+                {% for el in target_images_referencelesion_list %}
+                    <div class="target-box">
+                        {% if el.first_image_item %}
+                            <figure>
+
+                                    <img src="{{ el.first_image_item.url}}" alt="" height="80px" />
+                                    <figcaption>Target No : {{ el.target_no }}</figcaption>
+                            </figure>
+                        {% else %}
+                            <figure>
+
+                                    <p> No Target Image</p>
+                                    <figcaption>Target No : {{ el.target_no }}</figcaption>
+                            </figure>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div>
+                Not Assigned lesions
+            </div>
+            <div class="container-inner">
+                {% for el in target_images_noassignedlesion_list %}
+                    <div class="target-box">
+                        {% if el.first_image_item %}
+                            <figure>
+
+                                    <img src="{{ el.first_image_item.url}}" alt="" height="80px" />
+                                    <figcaption>Target No : {{ el.target_no }}</figcaption>
+                            </figure>
+                        {% else %}
+                            <figure>
+
+                                    <p> No Target Image</p>
+                                    <figcaption>Target No : {{ el.target_no }}</figcaption>
+                            </figure>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+
+            {#        <ul>#}
+            {#            {% for tumortarget in patient.tumortarget_set.all %}#}
+            {#                <li><a href="{% url "chemoresponse:tumortargets" patient_id=patient.id target_no=tumortarget.target_no %}">{{ tumortarget.target_no }}</a></li>#}
+            {#            {% endfor %}#}
+            {#        </ul>#}
+        {% else %}
+            <p>No targets are available.</p>
+        {% endif %}
+
+    </div>
+{% endblock %}

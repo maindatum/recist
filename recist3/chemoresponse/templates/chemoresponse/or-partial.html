@@ -1,0 +1,8 @@
+        {% for tgt, msm in response_dict.items %}
+            <tr>
+                <td>{% if tgt <= 1000 %}<a href="{% url 'chemoresponse:tumortargets' response_target_list.id tgt%}">{{ tgt }}</a>{% else%}{{ tgt }}{% endif %}</td>
+                {%for yr, msval in msm.items%}
+                    <td>{{ msval }}</td>
+                {% endfor %}
+            </tr>
+        {% endfor %}

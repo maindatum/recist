@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+{% block head %}
+    <style>
+    .menu-box{
+            display:grid;
+            grid-template-columns:200px 200px 200px 200px;
+            justify-content: center;
+            justify-items:center;
+            margin-bottom:10px
+    }
+    .container{
+        display:grid;
+        grid-template-columns: 700px;
+        justify-content: center;
+    }
+    .container-inner{
+        display:grid;
+        grid-template-columns: 100px auto;
+    }
+    .box{
+        display:grid;
+        grid-template-columns: 100px;
+        border:1px solid red;
+    }
+    .box-img-container{
+        display:grid;
+        grid-template-columns: 150px 150px 150px 150px 150px;
+        gap:5px;
+        grid-auto-rows: auto;
+        border:1px solid red;
+        justify-items: center;
+
+    }
+    .box-inner {
+        background: #EDE7F6;
+        padding: 0rem;
+        border-radius: 1rem;
+        overflow: hidden;
+        text-align:center;
+        font-size:0.8rem;
+    }
+
+    figure{
+        position:relative;
+        margin:0;
+        left:100%;
+        text-align: center;
+        margin-left:-200%;
+    }
+    .baseline{
+        display:grid;
+        border:1px solid brown;
+        background-color:red;
+        text-decoration-color: white;
+        justify-content: center;
+    }
+    .no-baseline{
+        display:grid;
+        border:1px solid brown;
+        background-color:yellowgreen;
+        text-decoration-color: white;
+        justify-content: center;
+    }
+    .measure{
+        display:grid;
+        justify-content: center;
+    }
+
+    </style>
+{% endblock %}
+{% block content %}
+    <h3>Patient : {{response_target_list.ptname }} </h3>
+    <div class="menu-box">
+        <a href="{% url 'chemoresponse:patientlist'%}"><button type="button">환자목록</button></a>
+        <a href="{% url 'chemoresponse:targetlist' response_target_list.id%}"><button type="button">표적목록으로</button></a>
+        <a href="{% url 'chemoresponse:target-update-list' response_target_list.id %}"><button type="button">표적 수정</button></a>
+        <a href="{% url 'chemoresponse:overall-reseponse' response_target_list.id %}"><button type="button">전체반응평가</button></a>
+    </div>
+    <div class="container">
+        {% for key, tgt in wrapped_targets.items %}
+            <div class="container-inner">
+                <div class="box">
+                    {{ key }}
+                </div>
+                <div class="box-img-container">
+                    {% for key, item in tgt.items %}
+
+                        <div class="box-inner">
+                            <figure>
+                                <img src="{{ item.img.target_image.thumb_url}}" alt="" width=100px height=auto/>
+                                <figcaption>{{ item.img.image_modal.image_date }}</figcaption>
+                                <figcaption>{{ item.img.image_modal }}</figcaption>
+                            </figure>
+                            <div>
+                                {% if item.img.baseline %}
+                                    <div class="baseline">baseline</div>
+                                {% else %}
+                                    <div class="no-baseline">none</div>
+                                {% endif %}
+                            </div>
+                            <div class="measure">{{ item.img.lesion_measure }} cm</div>
+                            <div class="measure">({{ item.resp|stringformat:"+d" }}%)</div>
+                        </div>
+
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

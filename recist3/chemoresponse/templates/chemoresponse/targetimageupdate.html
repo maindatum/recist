@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% block head %}
+    <style>
+    .form-container{
+        display:grid;
+        grid-template-columns: 200px 200px 200px 200px;
+        justify-content: center;
+    }
+    .container{
+        display:grid;
+        justify-content:center;
+        border:1px solid red;
+    }
+    .container-inner{
+        display:grid;
+        grid-template-columns:600px;
+        grid-auto-rows;minmax(70px, auto);
+        border:1px solid blue;
+    }
+    .box{
+        display:grid;
+        grid-template-columns:150px 500px;
+        border:1px solid yellow;
+    }
+    </style>
+{% endblock %}
+{% block content %}
+    <h3>Patient ID: {{ patient_id }} Target No: {{target_no}}</h3>
+    <div class="form-container">
+            <a href="{% url 'chemoresponse:targetlist' patient_id%}"><button type="button">표적목록으로</button></a>
+        <a href="{%url 'chemoresponse:targetimagecreate' patient_id target_no %}"><button type="button">이미지 추가하기</button></a>
+        <a href="{%url 'chemoresponse:tumortargets-updatelist' patient_id target_no %}"><button type="button">이미지 수정하기</button></a>
+        <a href="{% url 'chemoresponse:tumortargets' patient_id target_no%}"><button type="button">이미지목록으로</button></a>
+
+    </div>
+    <div class="container">
+<form method="POST" enctype="multipart/form-data" action="">
+                {% csrf_token %}
+    <div class="container-inner">
+        {% for field in form%}
+            <div class="box">
+                <div>{{ field.label }}</div>
+                <div>{{ field }}</div>
+            </div>
+        {% endfor %}
+    </div>
+{#    <div>{{ form.target }}</div>#}
+{#    <div>#}
+{#        <figure>#}
+{#            <img src="{{ form.instance.target_image.url}}" alt="" height="250px" />#}
+{#            <figcaption style="width:150px">{{ image.target_image.url }}</figcaption>#}
+{#            <figcaption>{{ form.instance.image_date }}</figcaption>#}
+{#        </figure>#}
+{#    </div>#}
+{#    <div>#}
+{#        {{ form.target_image }}#}
+{#    </div>#}
+ <button type="submit" class="btn btn-primary">수정하기</button>
+</form>
+</div>
+{% endblock %}

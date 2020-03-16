@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% block head %}
+<style>
+    .form-container{
+        border:1px solid yellowgreen;
+        grid-template-columns: 200px 200px 200px 200px;
+        display:grid;
+        justify-content: center;
+        grid-gap:10px;
+        justify-items:center;
+        margin:10px;
+    }
+    .container {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        grid-gap: 1rem;
+
+
+    }
+    .box{
+        background: #EDE7F6;
+        padding: 1.5rem;
+        border-radius: 1rem;
+        overflow: hidden;
+
+    }
+    .centered{
+        overflow:hidden;
+        text-align:center;
+
+    }
+
+    figure{
+            position:relative;
+            margin:0;
+            left:100%;
+            text-align: center;
+            margin-left:-200%;
+        }
+    .baseline{
+        display:grid;
+        border:1px solid brown;
+        background-color:red;
+        text-decoration-color: white;
+        justify-content: center;
+    }
+    .no-baseline{
+        display:grid;
+        border:1px solid brown;
+        background-color:yellowgreen;
+        text-decoration-color: white;
+        justify-content: center;
+    }
+    .measure{
+        display:grid;
+        justify-content: center;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+    <h3>Patient ID: {{ patient_id }} Target No: {{target_no}}</h3>
+    <div class="form-container">
+        <a href="{% url 'chemoresponse:targetlist' patient_id%}"><button type="button">표적목록으로</button></a>
+        <a href="{%url 'chemoresponse:targetimagecreate' patient_id target_no %}"><button type="button">이미지 추가하기</button></a>
+        <a href="{%url 'chemoresponse:tumortargets-updatelist' patient_id target_no %}"><button type="button">이미지 수정하기</button></a>
+        <a href="{% url 'chemoresponse:tumortargets' patient_id target_no%}"><button type="button">이미지목록으로</button></a>
+    </div>
+    <div class="container">
+        {% if tumortargetimage_list%}
+            {% for key, item in image_plus_response_dict.items %}
+                <div class="box">
+                    <div class="centered">
+                        <figure>
+                            <img src="{{ item.img.target_image.thumb_url}}" alt="" height=auto/>
+                            <figcaption>{{ item.img.image_modal.image_date }}</figcaption>
+                            <figcaption>{{ item.img.target_image.url }}</figcaption>
+                        </figure>
+                        <div>
+                            <a href="{%url 'chemoresponse:targetimage-update' patient_id target_no item.img.id %}"><button>수정하기</button></a>
+                            <a href="{%url 'chemoresponse:targetimage-delete' patient_id target_no item.img.id %}"><button>삭제하기</button></a>
+                        </div>
+
+                    </div>
+                    <div>
+                        {% if item.img.baseline %}
+                            <div class="baseline">baseline</div>
+                        {% else %}
+                            <div class="no-baseline">none</div>
+                        {% endif %}
+                    </div>
+                    <div class="measure">{{ item.img.lesion_measure }} cm</div>
+                    <div class="measure">({{ item.resp|stringformat:"+d" }}%)</div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No target images are available.</p>
+        {% endif %}
+    </div>
+{% endblock %}

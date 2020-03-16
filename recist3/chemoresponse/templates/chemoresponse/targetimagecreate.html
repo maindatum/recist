@@ -1,0 +1,319 @@
+{% extends 'base.html' %}
+{% block head %}
+    <!-- include libraries(jQuery, bootstrap) -->
+{#    <link href="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">#}
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+{#    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>#}
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <style>
+        .form-container{
+        border:1px solid yellowgreen;
+        grid-template-columns: 200px 200px 200px 200px;
+        display:grid;
+        justify-content: center;
+        grid-gap:10px;
+        justify-items:center;
+        margin:10px;
+    }
+        .container{
+            display:grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            grid-gap: 1rem;
+            align-content: start;
+            justify-content: center;
+
+        }
+        .box{
+            background: #EDE7F6;
+            padding: 1.5rem;
+            border-radius: 1rem;;
+            border: 1px solid orange
+        }
+        .centered{
+            overflow:hidden;
+            padding: 0;
+            border:1px dashed black;
+        }
+        figure{
+            margin:0;
+            text-align: center;
+            border: 1px solid red;
+            position:relative;
+            left:100%;
+            margin-left:-200%;
+        }
+        img{
+            border: 1px solid blue;
+        }
+
+        .container-form{
+            display:grid;
+            grid-template-columns: repeat(auto-fill, minmax(800px, 1fr));
+            grid-gap: 1rem;
+            align-content: start;
+            justify-content: center;
+            align-items:center;
+            justify-items: center;
+
+        }
+
+        .pasted-image-area{
+            display:grid;
+            width:400px;
+            height:200px;
+            align-content: center;
+            justify-content: center;
+            border:1px solid;
+        }
+
+        .box-form{
+            background: #EDE7F6;
+            padding: 1.5rem;
+            border-radius: 1rem;;
+            border:1px solid purple;
+        }
+        .btn-paste{
+            display:grid;
+            border: 1px solid crimson;
+            justify-content: center;
+        }
+        .required{
+            border:2px solid purple
+        }
+        #image_area{
+            height:200px;
+            border:1px solid orange;
+        }
+
+    </style>
+{% endblock %}
+{% block content %}
+<body>
+    <div>
+        <h2>patient:{{ patient_id }} target:{{ target_no }}</h2>
+    </div>
+        <div class="form-container">
+        <a href="{% url 'chemoresponse:targetlist' patient_id%}"><button type="button">표적목록으로</button></a>
+        <a href="{%url 'chemoresponse:targetimagecreate' patient_id target_no %}"><button type="button">이미지 추가하기</button></a>
+        <a href="{%url 'chemoresponse:tumortargets-updatelist' patient_id target_no %}"><button type="button">이미지 수정하기</button></a>
+        <a href="{% url 'chemoresponse:tumortargets' patient_id target_no%}"><button type="button">이미지목록으로</button></a>
+    </div>
+
+    <div class="container">
+        {% for image in image_list %}
+            <div class="box">
+                <div class="centered">
+                    <figure>
+                        <img src="{{ image.target_image.thumb_url}}" alt="" height=auto />
+                        {#                            <figcaption style="width:150px">{{ image.target_image.url }}</figcaption>#}
+                        <figcaption>{{ image.image_date }}</figcaption>
+                    </figure>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="container-form">
+
+        <div class="box-form pasted-image-area">
+            <div class="btn-paste">미리보기</div>
+            <div id="image_area"></div>
+            <div class="btn-paste">
+                <button type="button" class="btn btn-primary" id="btn_id_image_desc" data-imagegrab-url ={% url 'chemoresponse:imagegrab' %}>붙여넣기</button>
+            </div>
+        </div>
+        <div class="box-form">
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                {% for field in form %}
+                    <div>
+                        <div>
+                            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        </div>
+                        <div class="{% if field.field.required %}required{% endif %}">{{ field }}</div>
+                        <div>
+                            {{ field.errors }}
+                        </div>
+
+                    </div>
+                {% endfor %}
+                <button type="submit" class="btn btn-primary">생성</button>
+            </form>
+        </div>
+    </div>
+    <div id='editableDiv' contenteditable='true'>Paste</div>
+    <label for="testId">여기있다.</label><input type="text" id="testId">
+
+</body>
+<script>
+    function pasteHandler(e) {
+            console.log('this is clipboradata hander function!!');
+            document.execCommand("Paste");
+        if (e.clipboardData||window.clipboardData) {
+            dataInClipboard = e.clipboardData||window.clipboardData;
+            console.log('this is clipboradata hander inner');
+            // Get the items from the clipboard
+            let items = e.clipboardData.items;
+            if (items) {
+                // Loop through all items, looking for any kind of image
+                for (let i = 0; i < items.length; i++) {
+                    if (items[i].type.indexOf("image") !== -1) {
+                        // We need to represent the image as a file,
+                        let blob = items[i].getAsFile();
+                        let URLObj = window.URL || window.webkitURL;
+                        let source = URLObj.createObjectURL(blob);
+                        let reader = new FileReader();
+                        reader.onload = function(e) {
+                            document.getElementById("summaryImage").value= reader.result;
+                        };
+                        reader.readAsDataURL(blob);
+                    }
+                }
+            }
+        }
+        else{
+            console.log('there is no clipboard data.')
+        }
+    }
+
+    async function searchimg(form_url){
+                axios.defaults.xsrfCookieName = 'csrftoken';
+                axios.defaults.xsrfHeaderName = 'X-CSRFToken';
+                console.log("hello this is in searchall function");
+
+                console.log('this is url', form_url);
+                try {
+                    const res = await axios({
+                        method: 'get',
+                        url: form_url,
+                    });
+                    let htmlimgtag = res.data.html_img_tag;
+                    let imgbase64text = res.data.img_base64_text;
+                    if (htmlimgtag) {
+                        render_data('image_area',htmlimgtag);
+                    }
+                    if (imgbase64text){
+                        render_data('id_image_desc',imgbase64text);
+                        render_value('id_image_container',imgbase64text);
+                    }
+
+                    console.log('imgtxt', imgbase64text);
+                    ChangeImageInputElement.value=imgbase64text;
+                    console.log('success');
+                    {#let image = new Image();#}
+                    {#let imagestring = 'data:image/png;base64,';#}
+                    {#let imagestringresult;#}
+                    {#imagestringresult = imagestring.concat(b64encoded);#}
+                    {#console.log(imagestringresult);#}
+                    {#image.src = imagestringresult;#}
+                    {#imageAreaElement.setAttribute('src',imagestringresult);#}
+
+                } catch {
+                    console.log ('failed search image func.');
+                }
+            }
+
+
+    function render_data(element,html_data){
+        const render_area = document.getElementById(element);
+        render_area.innerHTML = html_data;
+    }
+
+    function render_value(element,html_data){
+        const render_area = document.getElementById(element);
+        render_area.value = html_data;
+    }
+    const imagedescElement = document.getElementById("btn_id_image_desc");
+    console.log(imagedescElement);
+
+    const imageAreaElement = document.getElementById("image_area");
+    console.log(imageAreaElement);
+    const ChangeImageInputElement = document.getElementById("id_target_image");
+    console.log(ChangeImageInputElement);
+
+    function bindPasteButton(){
+        imagedescElement.addEventListener('click', event => {
+                const form_url = imagedescElement.getAttribute('data-imagegrab-url');
+                event.preventDefault();
+                event.stopPropagation();
+                searchimg(form_url);
+            }
+        )
+    }
+
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            let reader = new FileReader();
+            console.log('input files is -> ',input.files[0]);
+            reader.readAsDataURL(input.files[0]);
+            let htmlimgtag = "<img height=\"200px\" src=";
+            reader.onload = function (e) {
+                console.log(e.target.result);
+                htmlimgtag += e.target.result  + ">";
+                render_data('image_area',htmlimgtag);
+                render_value('id_image_container','');
+            };
+        }
+    }
+
+    function bindChangeImageInputButton(){
+        ChangeImageInputElement.addEventListener('change', event => {
+                event.preventDefault();
+                event.stopPropagation();
+                readURL(ChangeImageInputElement);
+            }
+        )
+    }
+
+    function handlePaste (e) {
+        var clipboardData, pastedData;
+
+        var URLObj = window.URL||window.webkitURL;
+
+        // Stop data actually being pasted into div
+        e.stopPropagation();
+        e.preventDefault();
+
+        // Get pasted data via clipboard API
+        clipboardData = e.clipboardData || window.clipboardData;
+        var items = clipboardData.items;
+        for (var i=0; i<items.length;i++){
+            console.log(i);
+            console.log(items[i])
+        }
+        item1 = items[0];
+        alert(item1);
+        var blob2 = item1.getAsFile();
+        console.log('this is blob2', blob2);
+
+        {#var source = URLObj.createObjectURL(blob2);#}
+        {#console.log('this is source', source);#}
+        var reader = new FileReader();
+        {#readerdata = reader.readAsDataURL(blob2);#}
+        {#console.log(readerdata);#}
+        reader.onload=function(e){
+            alert('loaded');
+            console.log('this is reader result', reader.result);
+            document.getElementById('editableDiv').value = reader.result;
+            let htmlimgtag = "<img height=\"200px\" src=";
+            htmlimgtag += e.target.result  + ">";
+            render_data('image_area',htmlimgtag);
+            render_value('id_image_container',htmlimgtag);
+        };
+        reader.readAsDataURL(blob2);
+
+
+        // Do whatever with pasteddata
+        alert(pastedData);
+    }
+
+    document.getElementById('editableDiv').addEventListener('paste',handlePaste
+    );
+    function main(){
+        console.log('hello this is ds2html');
+        bindPasteButton();
+        bindChangeImageInputButton();
+    }
+    document.addEventListener('DOMContentLoaded', main);
+</script>
+{% endblock %}

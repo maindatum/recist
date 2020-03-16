@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% block head %}
+    <style>
+           .menu-box{
+            display:grid;
+            grid-template-columns:200px 200px 200px 200px;
+            justify-content: center;
+            border:1px dotted red;
+        }
+        .container{
+            display: grid;
+            grid-template-columns: 400px;
+            justify-content: center;
+        }
+        .container-inner{
+            display:grid;
+            grid-template-columns: 300px 300px;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div>
+        <h2>patient:{{ patient_id }} target:{{ target_no }}</h2>
+    </div>
+        <div class="menu-box">
+        <a href="{% url 'chemoresponse:targetlist' patient_id%}"><button type="button">표적목록으로</button></a>
+        <a href="{%url 'chemoresponse:targetimagecreate' patient_id target_no %}"><button type="button">이미지 추가하기</button></a>
+        <a href="{%url 'chemoresponse:tumortargets-updatelist' patient_id target_no %}"><button type="button">이미지 수정하기</button></a>
+        <a href="{% url 'chemoresponse:tumortargets' patient_id target_no%}"><button type="button">이미지목록으로</button></a>
+    </div>
+    <div class="box">
+        {{ targetimage_detail.target_image}}
+        <figure>
+            <img src="{{ targetimage_detail.target_image.url}}" alt="" style="max-width:100%; max-height:100%"/>
+            <figcaption>{{ targetimage_detail.image_date }}</figcaption>
+            <figcaption>{{ targetimage_detail.target_image.url }}</figcaption>
+        </figure>
+    </div>
+
+    </div>
+    <div class="container">
+        <div class="container-inner">
+            <div>
+                촬영일
+            </div>
+            <div class="box">
+                {{ targetimage_detail.image_date }}
+            </div>
+        </div>
+        <div class="container-inner">
+            <div>
+                상세설명
+            </div>
+            <div class="box">
+                {{ targetimage_detail.image_desc }}
+            </div>
+        </div>
+        <div class="container-inner">
+            <div>
+                표적번호
+            </div>
+
+            <div class="box">
+                <a href="{% url 'chemoresponse:targetlist' pk=patient_id %}">{{ targetimage_detail.target.target_no }}
+
+            </a></div>
+
+        </div>
+        <div class="container-inner">
+            <div>
+                검사방법
+            </div>
+            <div class="box">
+                {{ targetimage_detail.image_modal }}
+            </div>
+        </div>
+    </div>
+    <div>
+{% endblock %}

@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% block head %}
+    <style>
+        .target-container {
+            display: grid;
+            border: 3px dotted red;
+            grid-template-rows: 500px;
+            grid-template-columns:600px ;
+            align-content: center;
+            justify-content: center;
+            align-items:center;
+            justify-items: center;
+        }
+        .target-inner{
+            display:grid;
+            border:2px dashed green;
+            grid-template-columns:200px 200px;
+
+        }
+        .target-box{
+            border:1px solid blue;
+            height:40px;
+            width:200px;
+        }
+        .target-container-btn{
+            display:grid;
+            grid-template-rows:100px;
+            grid-template-columns: 200px;
+            align-content:center;
+            align-items:center;
+            justify-content:center;
+            justify-items:center;
+        }
+        .target-box-btn{
+            display:grid;
+            border:1px solid blue;
+            height:40px;
+            width:200px;
+            align-items:center;
+
+        }
+        .menu-box{
+            display:grid;
+            grid-template-columns:200px 200px 200px 200px;
+            justify-content: center;
+        }
+    </style>
+{% endblock %}
+{% block content %}
+    <h3>표적 리스트 대상 환자 : {{patient.ptname}}</h3>
+    <div class="menu-box">
+        <a href="{% url 'chemoresponse:patientlist' %}"><button type="button">환자 관리</button></a>
+        <a href="{% url  'chemoresponse:evalmodality-list' patient_id %}"><button type="button">검사 관리</button></a>
+        <a href="{% url 'chemoresponse:eval-modal-create' patient_id %}"><button type="button">검사 추가</button></a>
+    </div>
+    <div class="target-container">
+        <form method="POST">
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="target-inner">
+                    <div class="target-box">
+                        {{ field.label }}
+                    </div>
+                    <div class="target-box">
+                        {{ field }}
+                    </div>
+                </div>
+            {% endfor %}
+            <div class="target-container-btn">
+                <div class="target-box-btn">
+                    <button type="submit">수정하기</button>
+                </div>
+                <div class="target-box-btn">
+                    <a href="{% url 'chemoresponse:patientlist' %}"><button type="button">환자관리로</button></a>
+                </div>
+            </div>
+        </form>
+    </div>
+
+{% endblock %}

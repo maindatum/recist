@@ -1,0 +1,188 @@
+{% extends 'base3.html' %}
+{% block head %}
+    <style>
+    .menu-box{
+            display:grid;
+            grid-template-columns:200px 200px 200px 200px;
+            justify-content: center;
+            justify-items:center;
+            margin-bottom:10px
+    }
+    .table-container{
+        width:auto;
+        border:solid 1px red;
+    }
+    td {
+        width:100px;
+        border:solid 1px blue;
+        text-align:center;
+    }
+    .container{
+        display:grid;
+        grid-template-columns: 1000px;
+        justify-content: center;
+        justify-items: center;
+        border:solid 1px purple;
+    }
+    .container-inner{
+        display:grid;
+        grid-template-columns: 100px auto;
+    }
+    .box{
+        display:grid;
+        grid-template-columns: 100px;
+        border:1px solid red;
+    }
+    .box-img-container{
+        display:grid;
+        grid-template-columns: 150px 150px 150px 150px 150px;
+        gap:5px;
+        grid-auto-rows: auto;
+        border:1px solid red;
+        justify-items: center;
+
+    }
+    .box-inner {
+        background: #EDE7F6;
+        padding: 0rem;
+        border-radius: 1rem;
+        overflow: hidden;
+        text-align:center;
+        font-size:0.8rem;
+    }
+
+    figure{
+        position:relative;
+        margin:0;
+        left:100%;
+        text-align: center;
+        margin-left:-200%;
+    }
+    .baseline{
+        display:grid;
+        border:1px solid brown;
+        background-color:red;
+        text-decoration-color: white;
+        justify-content: center;
+    }
+    .no-baseline{
+        display:grid;
+        border:1px solid brown;
+        background-color:yellowgreen;
+        text-decoration-color: white;
+        justify-content: center;
+    }
+    .measure{
+        display:grid;
+        justify-content: center;
+    }
+
+    </style>
+{% endblock %}
+{% block content %}
+    <h3>Patient : {{response_target_list.ptname }} </h3>
+    <div class="menu-box">
+        <a href="{% url 'chemoresponse:patientlist'%}"><button type="button">환자목록</button></a>
+        <a href="{% url 'chemoresponse:targetlist' response_target_list.id%}"><button type="button">표적목록으로</button></a>
+        <a href="{% url 'chemoresponse:target-update-list' response_target_list.id %}"><button type="button">표적 수정</button></a>
+        <a href="{% url 'chemoresponse:overall-reseponse' response_target_list.id %}"><button type="button">전체반응평가</button></a>
+    </div>
+    <div class="menu-box">
+        <button id="re-base" type="button">재산정</button>
+    </div>
+<div class="container">
+    <table class="table-container">
+        <th>t</th>
+        {% for el in response_yrmonth %}
+            <th>{{ el }}</th>
+        {% endfor %}
+    <tbody id="main-tbody">
+    {% include "./or-partial.html" %}
+    </tbody>
+        {#        {% for el in response_yrmonth %}#}
+{#            <th>{{ el }}</th>#}
+{#        {% endfor %}#}
+{#        {% for tgt, msm in response_dict.items %}#}
+{#            <tr>#}
+{#                <td>{{ tgt }}</td>#}
+{#                {%for yr, msval in msm.items%}#}
+{#                    <td>{{ msval }}</td>#}
+{#                {% endfor %}#}
+{#            </tr>#}
+{#        {% endfor %}#}
+    <tr><td>Baseline</td>
+        {% for el in response_yrmonth %}
+            <td><input class="baseline_ym" id={{ el }} type="checkbox"></td>
+        {% endfor %}
+    </tr>
+    </table>
+</div>
+    <script>
+        const chkBaseline = document.getElementsByClassName("baseline_ym");
+        const btnRecalc = document.getElementById("re-base");
+        const divMainbody = document.getElementById("main-tbody");
+
+        function render_data(element,html_data){
+            const render_area = document.getElementById(element);
+            render_area.innerHTML = html_data;
+        }
+
+
+        console.log(chkBaseline.length);
+        let chklen = chkBaseline.length;
+        let cnt=0;
+        let baseline_obj = {};
+
+        function bindReBaseBtn() {
+            btnRecalc.addEventListener('click', event => {
+                event.preventDefault();
+                event.stopPropagation();
+                sendBaselineData('{% url 'chemoresponse:overall-reseponse' response_target_list.id %}')
+            });
+        }
+
+        function chkBaselineData() {
+            for (cnt = 0; cnt < chklen; cnt++) {
+                console.log(chkBaseline[cnt].id);
+                console.log(chkBaseline[cnt].checked);
+                baseline_obj[chkBaseline[cnt].id] = chkBaseline[cnt].checked
+            }
+            console.log(baseline_obj);
+        return baseline_obj;
+        }
+
+         async function sendBaselineData(form_url){
+                axios.defaults.xsrfCookieName = 'csrftoken';
+                axios.defaults.xsrfHeaderName = 'X-CSRFToken';
+                const params = new URLSearchParams();
+                const baseline_info=chkBaselineData();
+
+                console.log("hello this is in sendBaselineData function");
+                console.log('this is url', form_url);
+                console.log('this is baselineinfo', baseline_info);
+                params.append('baseline_info',JSON.stringify(baseline_info));
+                try {
+                    const res = await axios({
+                        method: 'post',
+                        url: form_url,
+                        data:params,
+                    });
+                    console.log('this is res data',res.data);
+                    console.log('this is main-tbody', divMainbody);
+                    console.log(res.data.html_table);
+                    render_data('main-tbody',res.data.html_table);
+                } catch {
+                    console.log ('failed sendBaselineData func.');
+                }
+            }
+
+
+
+        function main(){
+        console.log('overall response html functions');
+        bindReBaseBtn()
+    }
+    document.addEventListener('DOMContentLoaded', main);
+
+    </script>
+{% endblock %}
