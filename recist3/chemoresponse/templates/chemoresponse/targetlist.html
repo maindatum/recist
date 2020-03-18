@@ -1,14 +1,55 @@
 {% extends 'base3.html' %}
 {% block head %}
     <style>
-        .menu-box{
+            .menu-box{
             display:grid;
             grid-template-columns:200px 200px 200px 200px;
+            background: #eee linear-gradient(to bottom, #fcfcfc, #eee);
+            align-content: center;
+            justify-items:center;
             justify-content: center;
+            margin-bottom: 20px;
+            border:1px solid #d5d5d5;
+            width:900px;
+            height:40px;
+            border-radius:20px;
+            padding:3px;
         }
+        .menu-btn{
+            height:34px;
+            border:1px solid #b82c2c;
+            outline:0;
+            border-radius:10px;
+            font-weight:500;
+            font-size:14px;
+            color:#fff;
+            background: #a55122 linear-gradient(to bottom, #dd7f4e, #ae501e);
+            cursor:pointer;
+            position:relative;
+
+        }
+        .menu-btn:hover::before{
+            content:"";
+            position:absolute;
+            border-radius:10px;
+            top:0;
+            left:0;
+            width:100%;
+            height:100%;
+            background: rgba(255,255,255,0.3);
+            box-shadow: 2px 2px 2px #999999;
+
+        }
+        .menu-btn:active{
+            border:1px solid #b82c2c;
+            transform:translate(1px, 1px);
+        }
+
+
         .target-container {
             display: grid;
-            border: 1px solid red;
+            border: 10px solid  #ffb03f;
+            border-radius:5px;
             grid-auto-rows: minmax(150px,auto);
             grid-template-columns: 100px 800px;
             align-content: center;
@@ -31,9 +72,9 @@
 {% block content %}
     <h3>표적 리스트 대상 환자 : {{patient.ptname}}</h3>
     <div class="menu-box">
-        <a href="{% url 'chemoresponse:patientlist' %}"><button type="button">환자 관리</button></a>
-        <a href="{% url 'chemoresponse:target-update-list' pk=pk %}"><button type="button">표적 수정</button></a>
-        <a href="{% url 'chemoresponse:targetcreate' pk=pk %}"><button type="button">표적 추가하기</button></a>
+        <a href="{% url 'chemoresponse:patientlist' %}"><button class="menu-btn" type="button">환자 관리</button></a>
+        <a href="{% url 'chemoresponse:target-update-list' pk=pk %}"><button class="menu-btn" type="button">표적 수정</button></a>
+        <a href="{% url 'chemoresponse:targetcreate' pk=pk %}"><button class="menu-btn" type="button">표적 추가하기</button></a>
      </div>
     <div class="target-container">
         {% if patient.tumortarget_set.all %}
