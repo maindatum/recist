@@ -5,6 +5,8 @@ from . import views
 app_name = 'chemoresponse'
 urlpatterns = [
     path('', views.PatientListView.as_view(), name='patientlist'),
+    path('targetlist-main/', views.PatientListforTargetView.as_view(), name='targetlist-main'),
+    path('imagelist-main/', views.PatientListforResponseView.as_view(), name='imagelist-main'),
     path('<int:pk>/targetlist', views.TargetListView.as_view(), name='targetlist'),
     path('<int:pk>/targetlist-for-images', views.TargetListforImagesView.as_view(), name='target-list-for-images'),
     path('<int:pk>/response-target-list', views.ResponseTargetListView.as_view(), name='reseponse-target-list'),

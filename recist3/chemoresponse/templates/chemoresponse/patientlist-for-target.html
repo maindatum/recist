@@ -1,7 +1,9 @@
 {% extends 'base.html' %}
 {% block head %}
     <style>
-            .upper-under-outer{
+        body{
+        }
+        .upper-under-outer{
             display:grid;
             grid-template-columns: 1fr 2fr;
             grid-auto-rows;
@@ -57,6 +59,11 @@
         .nav-link.selected{
             font-weight:600;
             border-bottom-color:#1074e7;
+        }
+        .nav-link.link-disabled{
+            font-weight:600;
+            color:lightgrey;
+
         }
 
         .desc-box{
@@ -118,7 +125,21 @@
             border-bottom-right-radius: 3px;
         }
 
-    .menu-btn{
+        .menu-box{
+            display:grid;
+            grid-template-columns:200px 200px 200px 200px;
+            background: #eee linear-gradient(to bottom, #fcfcfc, #eee);
+            align-content: center;
+            justify-items:center;
+            justify-content: center;
+            margin-bottom: 20px;
+            border:1px solid #d5d5d5;
+            width:900px;
+            height:40px;
+            border-radius:20px;
+            padding:3px;
+        }
+        .menu-btn{
             height:34px;
             border:1px solid #b82c2c;
             outline:0;
@@ -147,76 +168,109 @@
             transform:translate(1px, 1px);
         }
 
-               .container-outer{
+        .container-outer{
             display:grid;
             justify-content: center;
             justify-items:center;
+
+
+
         }
 
-        .container {
-            background-color: #ffeef8 !important;
+        .container{
+            background-color: #e7eae1 !important;
             border-radius:3px;
             border: 1px solid;
-            border-color: #ec6cb9;
+            border-color: #0366d6;
             display:grid;
             grid-template-columns: 800px;
             justify-content: center;
             justify-items:center;
             align-items: center;
-            width:600px;
-            padding:30px 5px;
-            margin-top:50px;
-            box-shadow: 1px 1px 1px #999999;
+            width:800px;
+            padding:15px 0px;
+            margin:10px;
+            box-shadow: 1px 1px 1px #999999
+        }
+        .container-inner{
+            display:grid;
+
+            grid-template-columns: 80px 150px 150px 150px 150px;
+            grid-auto-rows:40px;
+            align-items: center;
             align-content: center;
+            padding:10px;
+            border-radius:5px;
+            margin:10px;
+        }
+        .container-box{
 
-        }
-        .inner-container{
             display:grid;
-            grid-template-columns:200px 200px;
-            grid-auto-rows:minmax(50px, auto);
+            align-items: center;
+            align-content: center;
+            padding:3px;
+            height:35px;
         }
-        .bottom-container{
-            display:grid;
-            justify-items: center;
+        .btn-basic{
+            background-color: #3399ff;
+            border:3px solid darkblue;
+            color: white;
+            height:35px;
+            width:100px;
+            font-size:1rem;
+            box-shadow: 2px 2px 2px #999999;
+            border-radius:15px;
+            cursor:pointer;
         }
+        .btn-basic:hover{
+            background-color: #122dff;
+        }
+        .btn-basic:active{
+            background-color: #97d9ff;
+            transform:translate(1px, 1px);
+        }
+
+
+
     </style>
-
 {% endblock %}
 {% block content %}
-     <div class="upper-under-outer">
+    <div class="upper-under-outer">
         <div class="upper-box">
             <div class="desc-box">표적 리스트 대상 환자 : 전체환자 </div>
             <a href="{% url 'chemoresponse:patient-create' %}"> <button class='menu-btn' type="button">+ 새 환자등록</button></a>
         </div>
         <nav class="nav-box">
-            <a class="nav-box-item selected" href="{% url 'chemoresponse:patientlist' %}">환자 관리</a>
-            <a class="nav-box-item item-disabled"  href="{% url 'chemoresponse:targetlist-main' %}">표적 관리</a>
-            <a class="nav-box-item item-disabled" href="#">반응 관리</a>
+            <a class="nav-box-item item-disabled" href="{% url 'chemoresponse:patientlist' %}">환자 관리</a>
+            <a class="nav-box-item selected"  href="{% url 'chemoresponse:targetlist-main' %}">표적 관리</a>
+
+            <a class="nav-box-item item-disabled" href="{% url 'chemoresponse:imagelist-main' %}">반응 관리</a>
             <a class="nav-box-item item-disabled" href="#">반응 평가</a>
         </nav>
         <div></div>
         <div class="nav-box small">
-            <a class="nav-link" href="{% url 'chemoresponse:patientlist' %}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
-            <a class="nav-link"  href="#">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
-            <a class="nav-link" href="#">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
-            <a class="nav-link" href="#">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+            <a class="nav-link link-disabled" href="">표적 목록</a>
+            <a class="nav-link  link-disabled"  href="">표적 추가</a>
+            <a class="nav-link  link-disabled" href="">표적 수정</a>
+            <a class="nav-link  link-disabled" href="#">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
         </div>
-     </div>
-    <div class="container-outer">
-        <div class="container">
-            <form method="POST" action="{% url 'chemoresponse:patient-create' %}">
-                {% csrf_token %}
-                <div class="inner-container">
-                    {% for field in form %}
-                        <div>{{ field.label }}</div>
-                        <div>{{ field }}</div>
+    </div>
+        {% if latest_patient_list %}
+            <div class="container-outer">
+                <div class="container">
+                    {% for patient in latest_patient_list %}
+                        <div class="container-inner">
+                            <div class="container-box">{{ patient.ptname }}:</div>
+                            <div class="container-box"><a href="{% url "chemoresponse:targetlist" patient.id %}"><button class="btn-basic">표적목록</button></a></div>
+                            <div class="container-box"><a href="{% url "chemoresponse:target-list-for-images" patient.id %}"><button class="btn-basic">반응관리</button></a></div>
+                            <div class="container-box"> <a href="{% url 'chemoresponse:evalmodality-list' patient.id %}"><button type="button" class="btn-basic">검사관리</button></a></div>
+                            <div class="container-box"><a href="{% url "chemoresponse:reseponse-target-list" patient.id %}"><button class="btn-basic">반응평가</button></a></div>
+
+                        </div>
                     {% endfor %}
                 </div>
-                <div class="bottom-container">
-                    <button type="submit">등록</button>
-                </div>
-            </form>
-        </div>
-
-    </div>
+            </div>
+        {% else %}
+            <p>No patients are available.</p>
+        {% endif %}
 {% endblock %}

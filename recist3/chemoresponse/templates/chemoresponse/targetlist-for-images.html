@@ -1,6 +1,171 @@
 {% extends 'base3.html' %}
 {% block head %}
     <style>
+         .upper-under-outer{
+            display:grid;
+            grid-template-columns: 1fr 2fr;
+            grid-auto-rows;
+            justify-content: center;
+            justify-items;center;
+        }
+        .upper-box{
+            margin-top:20px;
+            display: flex;
+            flex-direction: row;
+            box-sizing:border-box;
+            align-content: center;
+            align-items:center;
+            justify-content: space-around;
+        }
+        .under-box-outer{
+            width:80%;
+            display:grid;
+            justify-content: center;
+        }
+        .under-box{
+            display: flex;
+            width:80%;
+            margin-top:20px;
+            margin-bottom: 10px;
+            flex-direction: row;
+            box-sizing:border-box;
+            justify-content:flex-end;
+        }
+        .nav-box{
+
+            margin-top:20px;
+            margin-bottom: 5px;
+            display: flex;
+            justify-content:center;
+            align-content: center;
+            align-items: center;
+
+        }
+        .nav-box.small{
+            margin-top:0;
+        }
+        .nav-link{
+            margin-right:20px;
+            text-decoration:none;
+            font-size: 14px;
+            color: #6a737d;
+            cursor: pointer;
+            border-bottom: 2px solid #ebefea;
+            transition: border-bottom-color .4s;
+            padding:2px 0;
+        }
+        .nav-link.selected{
+            font-weight:600;
+            border-bottom-color:#1074e7;
+        }
+        .nav-link.link-disabled{
+            font-weight:600;
+            color:lightgrey;
+
+        }
+
+        .desc-box{
+            background-color: #fff;
+            border: 1px solid #d1d5da;
+            border-radius: 3px;
+            padding:10px 25px 10px 25px;
+            box-shadow: 0 1px 5px rgba(27,31,35,.15)!important;
+        }
+
+        .nav-box:first-child{
+            border-top-left-radius: 3px;
+            border-bottom-left-radius: 3px
+        }
+        .nav-box:last-child{
+            border-top-right-radius: 3px;
+            border-bottom-right-radius: 3px;
+        }
+        .nav-box-item{
+            position: relative;
+            float: left;
+            padding: 6px 14px;
+            font-weight: 600;
+            line-height: 20px;
+            color: #586069;
+            border: 1px solid #e1e4e8;
+            text-decoration:none;
+            font-size:14px;
+            width:100px;
+            text-align: center;
+
+        }
+        .nav-box-item.small{
+            font-size:12px;
+            width:60px
+        }
+        .nav-box-item:hover{
+            background: rgba(255,255,255,0.3);
+            box-shadow: 1px 1px 1px #999999 inset;
+            top:0;
+            left:0;
+
+        }
+        .nav-box-item.selected{
+            color: #fff;
+            background-color: #0366d6;
+            border-color: #0366d6;
+        }
+        .nav-box-item.item-disabled{
+            color: #d6d6cc;
+
+        }
+        .nav-box-item:first-child{
+            border-top-left-radius: 3px;
+            border-bottom-left-radius: 3px
+        }
+        .nav-box-item:last-child{
+            border-top-right-radius: 3px;
+            border-bottom-right-radius: 3px;
+        }
+
+        .menu-box{
+            display:grid;
+            grid-template-columns:200px 200px 200px 200px;
+            background: #eee linear-gradient(to bottom, #fcfcfc, #eee);
+            align-content: center;
+            justify-items:center;
+            justify-content: center;
+            margin-bottom: 20px;
+            border:1px solid #d5d5d5;
+            width:900px;
+            height:40px;
+            border-radius:20px;
+            padding:3px;
+        }
+        .menu-btn{
+            height:34px;
+            border:1px solid #b82c2c;
+            outline:0;
+            border-radius:3px;
+            font-weight:600;
+            font-size:14px;
+            color:#fff;
+            background: #a55122 linear-gradient(to bottom, #dd7f4e, #ae501e);
+            cursor:pointer;
+            position:relative;
+        }
+        .menu-btn:hover::before{
+            content:"";
+            position:absolute;
+            border-radius:10px;
+            top:0;
+            left:0;
+            width:100%;
+            height:100%;
+            background: rgba(255,255,255,0.3);
+            box-shadow: 2px 2px 2px #999999;
+
+        }
+        .menu-btn:active{
+            border:1px solid #b82c2c;
+            transform:translate(1px, 1px);
+        }
+
         .menu-box{
             display:grid;
             grid-template-columns:200px 200px 200px 200px;
@@ -29,10 +194,26 @@
     </style>
 {% endblock %}
 {% block content %}
-    <h3>표적 리스트 대상 환자 : {{patient.ptname}}</h3>
-    <div class="menu-box">
-        <a href="{% url 'chemoresponse:patientlist' %}"><button type="button">환자 관리</button></a>
-     </div>
+       <div class="upper-under-outer">
+        <div class="upper-box">
+            <div class="desc-box">표적 리스트 대상 환자 : {{patient.ptname}} </div>
+            <a href="{% url 'chemoresponse:patient-create' %}"> <button class='menu-btn' type="button">+ 새 환자등록</button></a>
+        </div>
+        <nav class="nav-box">
+            <a class="nav-box-item item-disabled" href="{% url 'chemoresponse:patientlist' %}">환자 관리</a>
+            <a class="nav-box-item item-disabled"  href="{% url 'chemoresponse:targetlist-main' %}">표적 관리</a>
+            <a class="nav-box-item selected" href="#">반응 관리</a>
+            <a class="nav-box-item item-disabled" href="#">반응 평가</a>
+        </nav>
+        <div></div>
+        <div class="nav-box small">
+            <a class="nav-link selected" href="{% url "chemoresponse:target-list-for-images" pk=patient.id %}">표적리스트</a>
+            <a class="nav-link link-disabled"  href="#">이미지 추가하기</a>
+            <a class="nav-link link-disabled" href="#">이미지 수정하기</a>
+            <a class="nav-link link-disabled" href="#">이미지목록으로</a>
+        </div>
+    </div>
+
     <div class="target-container">
         {% if patient.tumortarget_set.all %}
             <div>

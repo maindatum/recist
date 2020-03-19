@@ -8,20 +8,21 @@ MEDIA_ROOT = os.path.join(BASE_DIR,'media')
 
 def _add_path_to_thumb(s):
     path_list=os.path.split(s)
-    print('split dir',s)
+    # print('split dir',s)
     fpath = os.path.dirname(s)
     fname = path_list[1]
-    print('fpath', fpath, 'fname', fname)
+    # print('fpath', fpath, 'fname', fname)
     fname_s_ext = os.path.splitext(fname)[0]
     thumb_fname = fname_s_ext + '-thumb.jpg'
     fpath_split=fpath.split(os.path.sep)
-    print(fpath_split)
+    # print(fpath_split)
     fpath_split_add_dir = fpath_split.append('thumbnails')
-    print(fpath_split_add_dir)
+    # print(fpath_split_add_dir)
     fpath_for_thumbnails= os.path.join(fpath,'thumbnails')
-    print(fpath_for_thumbnails)
+    # print(fpath_for_thumbnails)
     fullpath = os.path.join(fpath_for_thumbnails, thumb_fname)
-    print(fullpath)
+    # print('this is full path', fullpath)
+    # print(fullpath)
 
 
     # print('this is path',s)
@@ -45,6 +46,7 @@ def _add_path_to_thumb(s):
     # print('this is full path using os ',fullopathusingos )
 
     return fullpath
+
 
 def _add_url_to_thumb(s):
     print('this is url',s)

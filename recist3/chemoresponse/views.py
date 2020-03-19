@@ -47,6 +47,22 @@ class PatientListView(generic.ListView):
     def get_queryset(self):
         return Patient.objects.order_by('regist_date')
 
+
+class PatientListforTargetView(generic.ListView):
+    template_name = 'chemoresponse/patientlist-for-target.html'
+    context_object_name = 'latest_patient_list'
+
+    def get_queryset(self):
+        return Patient.objects.order_by('regist_date')
+
+class PatientListforResponseView(generic.ListView):
+    template_name = 'chemoresponse/patientlist-for-response.html'
+    context_object_name = 'latest_patient_list'
+
+    def get_queryset(self):
+        return Patient.objects.order_by('regist_date')
+
+
 class PatientCreateView(generic.CreateView):
     template_name = 'chemoresponse/patient-create.html'
     model = Patient

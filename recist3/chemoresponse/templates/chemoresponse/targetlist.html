@@ -1,7 +1,100 @@
 {% extends 'base3.html' %}
 {% block head %}
     <style>
-            .menu-box{
+        .upper-under-outer{
+            display:grid;
+            grid-template-columns: 1fr 2fr;
+            grid-auto-rows;
+            justify-content: center;
+            justify-items;center;
+        }
+        .upper-box{
+            margin-top:20px;
+            display: flex;
+            flex-direction: row;
+            box-sizing:border-box;
+            align-content: center;
+            align-items:center;
+            justify-content: space-around;
+        }
+        .nav-box{
+
+            margin-top:20px;
+            margin-bottom: 5px;
+            display: flex;
+            justify-content:center;
+            align-content: center;
+            align-items: center;
+
+        }
+        .nav-box.small{
+            margin-top:0;
+        }
+        .nav-link{
+            margin-right:20px;
+            text-decoration:none;
+            font-size: 14px;
+            color: #6a737d;
+            cursor: pointer;
+            border-bottom: 2px solid #ebefea;
+            transition: border-bottom-color .4s;
+            padding:2px 0;
+        }
+        .nav-link.selected{
+            font-weight:600;
+            border-bottom-color:#1074e7;
+        }
+
+        .desc-box{
+            background-color: #fff;
+            border: 1px solid #d1d5da;
+            border-radius: 3px;
+            padding:10px 25px 10px 25px;
+            box-shadow: 0 1px 5px rgba(27,31,35,.15)!important;
+        }
+
+        .nav-box:first-child{
+            border-top-left-radius: 3px;
+            border-bottom-left-radius: 3px
+        }
+        .nav-box:last-child{
+            border-top-right-radius: 3px;
+            border-bottom-right-radius: 3px;
+        }
+        .nav-box-item{
+            position: relative;
+            float: left;
+            padding: 6px 14px;
+            font-weight: 600;
+            line-height: 20px;
+            color: #586069;
+            border: 1px solid #e1e4e8;
+            text-decoration:none;
+            font-size:14px;
+            width:100px
+        }
+        .nav-box-item:hover{
+            background: rgba(255,255,255,0.3);
+            box-shadow: 1px 1px 1px #999999 inset;
+            top:0;
+            left:0;
+
+        }
+        .nav-box-item.selected{
+            color: #fff;
+            background-color: #0366d6;
+            border-color: #0366d6;
+        }
+        .nav-box-item:first-child{
+            border-top-left-radius: 3px;
+            border-bottom-left-radius: 3px
+        }
+        .nav-box-item:last-child{
+            border-top-right-radius: 3px;
+            border-bottom-right-radius: 3px;
+        }
+
+        .menu-box{
             display:grid;
             grid-template-columns:200px 200px 200px 200px;
             background: #eee linear-gradient(to bottom, #fcfcfc, #eee);
@@ -28,6 +121,15 @@
             position:relative;
 
         }
+        .menu-btn.small-btn{
+            height:23px;
+            background: #28a745 linear-gradient(to bottom, #34d058, #28a745 90%);
+            border:1px solid rgba(27,31,35,.2);
+            font-size: 12px;
+            border-radius:0.25rem;
+            font-weight:600;
+
+        }
         .menu-btn:hover::before{
             content:"";
             position:absolute;
@@ -44,13 +146,56 @@
             border:1px solid #b82c2c;
             transform:translate(1px, 1px);
         }
+        .menu-btn-link{
+            height:34px;
+            border:1px solid #b82c2c;
+            outline:0;
+            border-radius:3px;
+            font-weight:800;
+            font-size:14px;
+            text-decoration: none;
+            color:#fff;
+            background: #a55122 linear-gradient(to bottom, #dd7f4e, #ae501e);
+            cursor:pointer;
+            position:relative;
+            margin-left:10px;
+            padding:7px 5px;
+        }
+        .menu-btn-link.new-exam{
+            background: #a5191f linear-gradient(to bottom, #dd7f58, #ae0c2e);
 
+        }
+         .menu-btn.small-btn{
+            height:23px;
+            background: #28a745 linear-gradient(to bottom, #34d058, #28a745 90%);
+            border:1px solid rgba(27,31,35,.2);
+            font-size: 12px;
+            border-radius:0.25rem;
+            font-weight:600;
+
+        }
+        .menu-btn-link:hover::before{
+            content:"";
+            position:absolute;
+            border-radius:10px;
+            top:0;
+            left:0;
+            width:100%;
+            height:100%;
+            background: rgba(255,255,255,0.3);
+            box-shadow: 2px 2px 2px #999999;
+
+        }
+        .menu-btn-link:active{
+            border:1px solid #b82c2c;
+            transform:translate(1px, 1px);
+        }
 
         .target-container {
             display: grid;
             border: 10px solid  #ffb03f;
             border-radius:5px;
-            grid-auto-rows: minmax(150px,auto);
+            grid-auto-rows: minmax(200px,auto);
             grid-template-columns: 100px 800px;
             align-content: center;
             justify-content: center;
@@ -59,23 +204,78 @@
         }
         .container-inner{
             display:grid;
+            grid-template-rows: 200px;
             grid-template-columns: 200px 200px 200px 200px;
-            border: 2px solid orange;
+            align-items:center;
+            justify-items: center;
+
+        }
+        .target-box-outer{
+            display:grid;
+            grid-template-columns:150px;
+            grid-template-rows:120px 40px;
+            align-content: center;
+            align-items: center;
+            justify-content: center;
+            justify-items: center;
         }
         .target-box{
-            border:1px solid blue;
+            display:grid;
             height:120px;
-            width:200px;
+            width:150px;
+            align-content: center;
+            justify-content: center;
+            justify-items: center;
+            border:1px solid lightgrey;
+            background-color: #f4f2f3;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+        .target-box-bottom{
+            display:grid;
+            grid-template-rows: 40px;
+            grid-template-columns:150px;
+            background-color: white;
+            border:1px solid lightgrey;
+            align-items: center;
+            justify-content: center;
+            justify-items: center;
+        }
+        figure{
+            position:relative;
+            margin:0;
+            left:100%;
+            text-align: center;
+            margin-left:-200%;
+            margin-bottom:5px;
         }
     </style>
 {% endblock %}
 {% block content %}
-    <h3>표적 리스트 대상 환자 : {{patient.ptname}}</h3>
-    <div class="menu-box">
-        <a href="{% url 'chemoresponse:patientlist' %}"><button class="menu-btn" type="button">환자 관리</button></a>
-        <a href="{% url 'chemoresponse:target-update-list' pk=pk %}"><button class="menu-btn" type="button">표적 수정</button></a>
-        <a href="{% url 'chemoresponse:targetcreate' pk=pk %}"><button class="menu-btn" type="button">표적 추가하기</button></a>
-     </div>
+    <div class="upper-under-outer">
+        <div class="upper-box">
+            <div class="desc-box">표적 리스트 대상 환자 : {{patient.ptname}}</div>
+        </div>
+        <nav class="nav-box">
+            <div>
+                <a class="nav-box-item item-disabled" href="{% url 'chemoresponse:patientlist' %}">환자 관리</a>
+                <a class="nav-box-item selected"  href="{% url "chemoresponse:targetlist" patient.id %}">표적관리</a>
+                <a class="nav-box-item item-disabled" href="#">반응 관리</a>
+                <a class="nav-box-item item-disabled" href="#">반응 평가</a>
+            </div>
+            <div>
+                <a class='menu-btn-link new-exam' href="{% url 'chemoresponse:patient-create' %}" >+검사추가</a>
+            </div>
+        </nav>
+        <div></div>
+        <div class="nav-box small">
+            <a class="nav-link selected" href="{% url "chemoresponse:targetlist" patient.id %}">표적 목록</a>
+            <a class="nav-link"  href="{% url 'chemoresponse:target-update-list' pk=pk %}">표적 수정</a>
+            <a class="nav-link" href="{% url 'chemoresponse:targetcreate' pk=pk %}">표적 추가</a>
+            <a class="nav-link" href="#">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+        </div>
+    </div>
+
     <div class="target-container">
         {% if patient.tumortarget_set.all %}
             <div>
@@ -83,21 +283,26 @@
             </div>
             <div class="container-inner">
                 {% for el in target_images_targetlesion_list %}
-                    <div class="target-box">
-                        {% if el.first_image_item %}
-                            <figure>
+                    <div class="target-box-outer">
+                        <div class="target-box">
+                            {% if el.first_image_item %}
+                                <figure>
 
                                     <img src="{{ el.first_image_item.url}}" alt="" height="80px" />
                                     <figcaption>Target No : {{ el.target_no }}</figcaption>
-                            </figure>
-                        {% else %}
-                            <figure>
+                                </figure>
+
+                            {% else %}
+                                <figure>
 
                                     <p> No Target Image</p>
                                     <figcaption>Target No : {{ el.target_no }}</figcaption>
-                            </figure>
-                        {% endif %}
-
+                                </figure>
+                            {% endif %}
+                        </div>
+                        <div class="target-box-bottom">
+                            <a href="{% url "chemoresponse:tumortargets"  patient_id=patient.id target_no=el.target_no %}"><button class="menu-btn small-btn">이미지등록</button></a>
+                        </div>
                     </div>
                 {% endfor %}
             </div>
@@ -106,42 +311,54 @@
             </div>
             <div class="container-inner">
                 {% for el in target_images_nontargetlesion_list %}
-                    <div class="target-box">
-                        {% if el.first_image_item %}
-                            <figure>
+                    <div class="target-box-outer">
+                        <div class="target-box">
+                            {% if el.first_image_item %}
+                                <figure>
 
                                     <img src="{{ el.first_image_item.url}}" alt="" height="80px" />
                                     <figcaption>Target No : {{ el.target_no }}</figcaption>
-                            </figure>
-                        {% else %}
-                            <figure>
+                                </figure>
+                            {% else %}
+                                <figure>
 
                                     <p> No Target Image</p>
                                     <figcaption>Target No : {{ el.target_no }}</figcaption>
-                            </figure>
-                        {% endif %}
-                    </div>
+                                </figure>
+                            {% endif %}
+                        </div>
+                                <div class="target-box-bottom">
+                                    <a href="{% url "chemoresponse:tumortargets"  patient_id=patient.id target_no=el.target_no %}"><button class="menu-btn small-btn">이미지등록</button></a>
+                                </div>
+                     </div>
                 {% endfor %}
             </div>
             <div>
                 Reference lesions
             </div>
+
             <div class="container-inner">
                 {% for el in target_images_referencelesion_list %}
-                    <div class="target-box">
-                        {% if el.first_image_item %}
-                            <figure>
+                    <div class="target-box-outer">
+                        <div class="target-box">
+                            {% if el.first_image_item %}
+                                <figure>
 
                                     <img src="{{ el.first_image_item.url}}" alt="" height="80px" />
                                     <figcaption>Target No : {{ el.target_no }}</figcaption>
-                            </figure>
-                        {% else %}
-                            <figure>
+                                </figure>
+
+                            {% else %}
+                                <figure>
 
                                     <p> No Target Image</p>
                                     <figcaption>Target No : {{ el.target_no }}</figcaption>
-                            </figure>
-                        {% endif %}
+                                </figure>
+                            {% endif %}
+                        </div>
+                        <div class="target-box-bottom">
+                            <a href="{% url "chemoresponse:tumortargets"  patient_id=patient.id target_no=el.target_no %}"><button class="menu-btn small-btn">이미지등록</button></a>
+                        </div>
                     </div>
                 {% endfor %}
             </div>
@@ -151,20 +368,27 @@
             </div>
             <div class="container-inner">
                 {% for el in target_images_noassignedlesion_list %}
-                    <div class="target-box">
-                        {% if el.first_image_item %}
-                            <figure>
+                    <div class="target-box-outer">
+                        <div class="target-box">
+                            {% if el.first_image_item %}
+                                <figure>
 
                                     <img src="{{ el.first_image_item.url}}" alt="" height="80px" />
                                     <figcaption>Target No : {{ el.target_no }}</figcaption>
-                            </figure>
-                        {% else %}
-                            <figure>
+                                </figure>
+
+                            {% else %}
+                                <figure>
 
                                     <p> No Target Image</p>
                                     <figcaption>Target No : {{ el.target_no }}</figcaption>
-                            </figure>
-                        {% endif %}
+                                </figure>
+                            {% endif %}
+
+                        </div>
+                        <div class="target-box-bottom">
+                            <a href="{% url "chemoresponse:tumortargets"  patient_id=patient.id target_no=el.target_no %}"><button class="menu-btn small-btn">이미지등록</button></a>
+                        </div>
                     </div>
                 {% endfor %}
             </div>
